@@ -1,129 +1,56 @@
 package me.merteroglu;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class LAT {
-    private int[][] LAT;
-    private int[][] DOT;
-    private int[][] sBox;
-    private List<Integer> sBoxValues;
-    private int size;
 
-    public LAT(int size,String[][] sBox) {
-        this.LAT = new int[size*size][size*size];
-        fillArray(this.LAT);
-        this.DOT = new int[size*size][size*size];
-        fillArray(this.DOT);
+public class LAT extends Table{
 
-        this.sBox = new int[size][size];
-        this.sBoxValues = new ArrayList<>();
-        this.size = size;
-
-        for (int i = 0; i < sBox.length; i++) {
-            for (int j = 0; j < sBox.length; j++) {
-                this.sBox[i][j] = Integer.parseInt(sBox[i][j],16);
-            }
-        }
-
-        calcSBoxVal();
-        calcDOT();
-        calcLAT();
+    public LAT(String[][] sBox, int size, int bitSize) {
+        super(sBox, size, bitSize);
     }
 
-    private void fillArray(int[][] lat) {
-        for (int i = 0; i < lat.length; i++) {
-            Arrays.fill(lat[i],0);
-        }
-    }
-
-    private void calcSBoxVal(){
-        for (int i = 0; i < size*size; i++) {
-            int col = i >> 4;
-            int row = i & 15;
-            sBoxValues.add(sBox[row][col]);
-        }
-    }
-
-    private void calcDOT(){
-        for (int i = 0; i < size * size; i++) {
-            for (int j = 0; j < size * size; j++) {
-                DOT[i][j] = latDot(i,j);
+    @Override
+    public void calc(){
+        for (int i = 0; i <=size; i++) {
+            for (int j = 0; j <= size; j++) {
+                TABLE[i][j] = calcNumber(i,j) - ((int)Math.pow(2,bitSize-1));
             }
         }
     }
 
-    private void calcLAT(){
-        for (int i = 0; i < size * size; i++) {
-            for (int j = 0; j < size * size; j++) {
-                for (int k = 0; k < size * size; k++) {
-                    LAT[i][j] += DOT[i][k] ^ DOT[j][sBoxValues.get(k)];
-                }
-                LAT[i][j] = LAT[i][j] - 128;
-            }
-        }
-    }
 
-    private int latDot(int a,int b){
-        boolean[] binary1 = convertToBinary(a);
-        boolean[] binary2 = convertToBinary(b);
-        int out = 0;
+    @Override
+    protected int calcNumber(int inputMask, int outputMask) {
+        int total = 0;
+        for (int i = 0; i <= size; i++) {
+            String multipInput = multipArr(intToString(inputMask,bitSize).toCharArray(),
+                    intToString(Integer.parseInt(sBox[0][i],16),bitSize).toCharArray());
 
-        if(binary1[0] && binary2[0])
-            out = 1;
+            String multipOutput = multipArr(intToString(outputMask,bitSize).toCharArray(),
+                    intToString(Integer.parseInt(sBox[1][i],16),bitSize).toCharArray());
 
-        for (int i = 1; i < 8; i++) {
-            if(binary1[i] && binary2[i])
-                out = out ^ 1;
-            else
-                out = out ^ 0;
+            int xorInput = xorArr(multipInput.toCharArray());
+            int xorOutput = xorArr(multipOutput.toCharArray());
+            if(xorInput == xorOutput)
+                total++;
         }
 
-        return out;
+        return total;
     }
 
-    private boolean[] convertToBinary(int b){
-        boolean[] binArray = new boolean[8];
-        boolean bin;
-        for(int i = 7; i >= 0; i--) {
-            if (b%2 == 1) bin = true;
-            else bin = false;
-            binArray[i] = bin;
-            b/=2;
+    private String multipArr(char[] chrArr, char[] chrArr2) {
+        String newStr = "";
+        for (int i = 0; i < chrArr.length; i++) {
+            int v1 = Integer.parseInt(String.valueOf(chrArr[i]));
+            int v2 = Integer.parseInt(String.valueOf(chrArr2[i]));
+            newStr += (v1 * v2);
         }
-        return binArray;
+
+        return newStr;
     }
 
-    public void printSBox(){
-        print(sBox);
-    }
 
-    public void printLAT(){
-        print(LAT);
-    }
 
-    public void printSBoxValues(){
-        print(sBoxValues);
-    }
 
-    private void print(int[][] mat){
-        System.out.println();
-        for (int i = 0; i < mat.length; i++) {
-            for (int j = 0; j < mat[0].length; j++) {
-                System.out.print(mat[i][j] + "\t");
-            }
-            System.out.println();
-        }
-    }
-
-    private void print(List<Integer> arr){
-        System.out.println();
-        for (int i = 0; i < arr.size(); i++) {
-            System.out.print(arr.get(i) + "\t");
-        }
-        System.out.println();
-    }
 
 
 }
