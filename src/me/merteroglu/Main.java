@@ -20,8 +20,14 @@ public class Main {
             sBox[1][i] = scn.next();
         }
 
-        //LAT lat = new LAT(sBox,size,bitSize);
-        //lat.printTable();
+        System.out.println(" ---- LAT ---- ");
+
+        LAT lat = new LAT(sBox,size,bitSize);
+        lat.printTable();
+
+        System.out.println("\n\n");
+
+        System.out.println(" ---- DDT ---- ");
 
         DDT ddt = new DDT(sBox,size,bitSize);
         ddt.printTable();
