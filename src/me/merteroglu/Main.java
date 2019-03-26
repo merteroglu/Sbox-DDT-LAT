@@ -20,10 +20,12 @@ public class Main {
             sBox[1][i] = scn.next();
         }
 
-        System.out.println(" ---- LAT ---- ");
+        System.out.println("\n ---- LAT ---- ");
 
         LAT lat = new LAT(sBox,size,bitSize);
         lat.printTable();
+
+        System.out.println("\n\nNLM : " + lat.getNLM());
 
         System.out.println("\n\n");
 
@@ -31,9 +33,7 @@ public class Main {
 
         DDT ddt = new DDT(sBox,size,bitSize);
         ddt.printTable();
-
     }
-
 
 
 }

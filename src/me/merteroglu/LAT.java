@@ -4,6 +4,8 @@ package me.merteroglu;
 
 public class LAT extends Table{
 
+    private int NLM;
+
     public LAT(String[][] sBox, int size, int bitSize) {
         super(sBox, size, bitSize);
     }
@@ -15,6 +17,7 @@ public class LAT extends Table{
                 TABLE[i][j] = calcNumber(i,j) - ((int)Math.pow(2,bitSize-1));
             }
         }
+        NLM = (int)Math.pow(2,bitSize-1) - findBiggestNumber();
     }
 
 
@@ -48,9 +51,20 @@ public class LAT extends Table{
         return newStr;
     }
 
+    private int findBiggestNumber(){
+        int biggest = 0;
+        for (int i = 1; i <=size; i++) {
+            for (int j = 0; j <= size; j++) {
+                int cell = Math.abs(TABLE[i][j]);
+                if(cell > biggest)
+                    biggest = cell;
+            }
+        }
+        return biggest;
+    }
 
-
-
-
+    public int getNLM() {
+        return NLM;
+    }
 
 }
