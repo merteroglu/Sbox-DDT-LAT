@@ -5,9 +5,11 @@ package me.merteroglu;
 public class LAT extends Table{
 
     private int NLM;
+    private double NLM_MAX;
 
     public LAT(String[][] sBox, int size, int bitSize) {
         super(sBox, size, bitSize);
+        NLM_MAX = Math.pow(2,bitSize-1) - Math.pow(2,(bitSize/2) -1);
     }
 
     @Override
@@ -65,6 +67,15 @@ public class LAT extends Table{
 
     public int getNLM() {
         return NLM;
+    }
+
+    public double getNLM_MAX() {
+        return NLM_MAX;
+    }
+
+    public String getPercent(){
+        int v = (int) (NLM * 100) / (int) NLM_MAX;
+        return "%" + v;
     }
 
 }

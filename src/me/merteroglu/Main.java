@@ -27,6 +27,10 @@ public class Main {
 
         System.out.println("\n\nNLM : " + lat.getNLM());
 
+        System.out.println("\n\nNLMmax : " + lat.getNLM_MAX());
+
+        System.out.println("\n\nNLM Percent : " + lat.getPercent());
+
         System.out.println("\n\n");
 
         System.out.println(" ---- DDT ---- ");
