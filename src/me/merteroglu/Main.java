@@ -59,6 +59,13 @@ public class Main {
         int mapping = scn.nextInt();
 
         gf.createMapping(mapping);
+        System.out.println();
+        int counter = 1;
+        for (Integer i : gf.getMappingList()) {
+            System.out.println("x^" + counter + " -> " + "x^" + i);
+            counter++;
+        }
+
 
         gf.createSBox();
 
